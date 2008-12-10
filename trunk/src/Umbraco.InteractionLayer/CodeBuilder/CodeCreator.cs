@@ -44,7 +44,8 @@ namespace Umbraco.InteractionLayer.CodeBuilder
                 DocType dt = new DocType
                 {
                     Id = item.Id,
-                    Name = item.Text,
+                    Name = item.Text.Replace(" ", ""),
+                    OriginalName = item.Text,
                     DocTypeProperties = item.PropertyTypes.Select(pt => new Property
                     {
                         DataType = pt.GetDotNetType(),
@@ -81,7 +82,7 @@ namespace Umbraco.InteractionLayer.CodeBuilder
                 CodeTypeDeclaration currClass = new CodeTypeDeclaration(genName);
                 //create the custom attribute
                 CodeAttributeDeclaration classAttributes = new CodeAttributeDeclaration("UmbracoDocTypeInfo",
-                    new CodeAttributeArgument("Alias", new CodePrimitiveExpression(docType.Name)),
+                    new CodeAttributeArgument("Alias", new CodePrimitiveExpression(docType.Alias)),
                     new CodeAttributeArgument("Id", new CodePrimitiveExpression(docType.Id))
                     );
                 //add the address to the class

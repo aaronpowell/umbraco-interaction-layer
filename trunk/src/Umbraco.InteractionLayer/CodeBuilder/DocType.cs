@@ -4,6 +4,7 @@ namespace Umbraco.InteractionLayer.CodeBuilder
 {
     internal class DocType
     {
+        public string OriginalName { get; set; }
         public string Name { get; set; }
         public int Id { get; set; }
         public string Alias { get; set; }
