@@ -53,7 +53,7 @@ namespace Umbraco.InteractionLayer.Web.dashboard
 
             cc.GetDocTypes();
 
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "saved", "top.umbSpeechBubble('info','Umbraco Interaction Layer','Code generation complete.);", true);
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "saved", "top.umbSpeechBubble('info','Umbraco Interaction Layer','Code generation complete.');", true);
         }
     }
 }
