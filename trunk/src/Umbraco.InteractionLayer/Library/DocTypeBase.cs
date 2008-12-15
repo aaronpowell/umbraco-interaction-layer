@@ -35,7 +35,10 @@ namespace Umbraco.InteractionLayer.Library
             this.Id = source.Id;
             this.Text = source.Text;
             this.UniqueId = source.UniqueId;
-            this.ParentNodeId = source.Parent.Id;
+            if (source.Level != 1)
+            {
+                this.ParentNodeId = source.Parent.Id; 
+            }
             this._umbracoDocument = source;
 
             var customAttributes = this
