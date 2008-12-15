@@ -37,7 +37,7 @@ namespace Umbraco.InteractionLayer.Library
 
             var customAttributes = this
                 .GetType()
-                .GetProperties(BindingFlags.Instance)
+                .GetProperties()
                 .Where(Helper.CustomDocTypeProperties);
 
             var method = typeof(Helper)
