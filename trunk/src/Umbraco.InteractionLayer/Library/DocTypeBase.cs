@@ -20,8 +20,6 @@ namespace Umbraco.InteractionLayer.Library
         protected DateTime _createdDate;
         protected User _createUser;
 
-        protected Action<UmbracoFieldInfoAttribute> MandatoryFailException = a => { throw new ArgumentException("Property \"" + a.Alias + "\" is mandatory"); };
-
         protected DocTypeBase()
         {
             this.IsDirty = true;
@@ -29,6 +27,11 @@ namespace Umbraco.InteractionLayer.Library
 
         protected DocTypeBase(Document source)
         {
+            if (this.DocTypeInfo.Id != source.ContentType.Id)
+            {
+                throw new DocTypeMissMatchException(source.ContentType.Id, this.DocTypeInfo.Id);
+            }
+
             this.Id = source.Id;
             this.Text = source.Text;
             this.UniqueId = source.UniqueId;
@@ -245,15 +248,15 @@ namespace Umbraco.InteractionLayer.Library
                 new Switch(docProperty.GetValue(this, null))
                 .Case<int>(i =>
                 {
-                    if (i == default(int)) MandatoryFailException(umbAtt);
+                    if (i == default(int)) throw new MandatoryFailureException(umbAtt.Alias);
                 }, true)
                 .Case<string>(s =>
                 {
-                    if (s == default(string)) MandatoryFailException(umbAtt);
+                    if (s == default(string)) throw new MandatoryFailureException(umbAtt.Alias);
                 }, true)
                 .Default<object>(o =>
                 {
-                    if (o == null) MandatoryFailException(umbAtt);
+                    if (o == null) throw new MandatoryFailureException(umbAtt.Alias);
                 })
                 ;
             }
