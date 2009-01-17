@@ -143,7 +143,7 @@ namespace Umbraco.InteractionLayer.Library
         {
             get
             {
-                if (this._umbracoDocument != null && this._createdDate == DateTime.MinValue)
+                if (this._umbracoDocument != null)
                 {
                     this._createdDate = this._umbracoDocument.CreateDateTime;
                 }

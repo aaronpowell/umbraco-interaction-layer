@@ -44,7 +44,7 @@ namespace Umbraco.InteractionLayer.CodeBuilder
                 DocType dt = new DocType
                 {
                     Id = item.Id,
-                    Name = item.Text.Replace(" ", ""),
+                    Name = item.Text,
                     OriginalName = item.Text,
                     DocTypeProperties = item.PropertyTypes.Select(pt => new Property
                     {
@@ -55,7 +55,7 @@ namespace Umbraco.InteractionLayer.CodeBuilder
                         Alias = pt.Alias,
                         ValidationRegex = pt.ValidationRegExp
                     }),
-                    Alias = item.Alias,
+                    Alias = item.Alias.Replace(" ", "").Replace("-","_"),
                     Description = item.Description,
                     ChildContentTypes = item.AllowedChildContentTypeIDs
                 };
@@ -77,16 +77,19 @@ namespace Umbraco.InteractionLayer.CodeBuilder
 
                 CodeNamespace ns = GenerateNamespace(this.Namespace);
                 currUnit.Namespaces.Add(ns);
-
+                
                 //create class
                 CodeTypeDeclaration currClass = new CodeTypeDeclaration(genName);
                 //create the custom attribute
-                CodeAttributeDeclaration classAttributes = new CodeAttributeDeclaration("UmbracoDocTypeInfo",
-                    new CodeAttributeArgument("Alias", new CodePrimitiveExpression(docType.Alias)),
-                    new CodeAttributeArgument("Id", new CodePrimitiveExpression(docType.Id))
-                    );
+                CodeAttributeDeclarationCollection classAttributes = new CodeAttributeDeclarationCollection(
+                    new CodeAttributeDeclaration[] {
+                        new CodeAttributeDeclaration("UmbracoDocTypeInfo",
+                            new CodeAttributeArgument("Alias", new CodePrimitiveExpression(docType.Alias)),
+                            new CodeAttributeArgument("Id", new CodePrimitiveExpression(docType.Id))),
+                        new CodeAttributeDeclaration(new CodeTypeReference(typeof(DataContractAttribute), CodeTypeReferenceOptions.GlobalReference) )
+                    });
                 //add the address to the class
-                currClass.CustomAttributes.Add(classAttributes);
+                currClass.CustomAttributes.AddRange(classAttributes);
                 currClass.IsClass = true;
                 //add the summary decoration
                 currClass.Comments.AddRange(GenerateSummary(docType.Description));
@@ -112,7 +115,7 @@ namespace Umbraco.InteractionLayer.CodeBuilder
 
                     p.Name = docTypeProperty.Alias;
                     p.Type = new CodeTypeReference(docTypeProperty.DataType);
-                    p.Attributes = MemberAttributes.Public;
+                    p.Attributes = MemberAttributes.Public | MemberAttributes.Final;
                     p.HasGet = true;
                     p.HasSet = true;
                     p.GetStatements.Add(new CodeMethodReturnStatement(

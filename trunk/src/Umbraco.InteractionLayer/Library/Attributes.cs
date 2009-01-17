@@ -2,7 +2,7 @@
 
 namespace Umbraco.InteractionLayer.Library
 {
-    [global::System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    [global::System.AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public sealed class UmbracoFieldInfoAttribute : Attribute
     {
         public UmbracoFieldInfoAttribute() { }
