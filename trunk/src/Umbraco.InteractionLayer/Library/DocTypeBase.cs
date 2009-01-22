@@ -139,6 +139,21 @@ namespace Umbraco.InteractionLayer.Library
             }
         }
 
+        public bool Published
+        {
+            get
+            {
+                if (this._umbracoDocument == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return this._umbracoDocument.Published;
+                }
+            }
+        }
+
         public DateTime CreatedDate
         {
             get
