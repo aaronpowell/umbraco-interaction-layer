@@ -188,7 +188,7 @@ namespace Umbraco.InteractionLayer.CodeBuilder
                     if (realDocType != null)
                     {
                         CodeMemberField childMember = new CodeMemberField();
-                        string name = realDocType.Alias.EndsWith("y") ? realDocType.Alias.Replace("y", "ies") : realDocType.Alias.EndsWith("s") ? realDocType.Alias : realDocType.Alias + "s";
+                        string name = PluraliseName(realDocType.Alias);
                         childMember.Attributes = MemberAttributes.Private;
                         childMember.Name = "_" + name;
                         var t = new CodeTypeReference(typeof(IEnumerable<>));
@@ -373,6 +373,47 @@ namespace Umbraco.InteractionLayer.CodeBuilder
                     new CodeCommentStatement(summaryBody, true),
                     new CodeCommentStatement("</summary>", true)
                 };
+        }
+
+        private static bool IsVowel(char c)
+        {
+            switch (c)
+            {
+                case 'O':
+                case 'U':
+                case 'Y':
+                case 'A':
+                case 'E':
+                case 'I':
+                case 'o':
+                case 'u':
+                case 'y':
+                case 'a':
+                case 'e':
+                case 'i':
+                    return true;
+            }
+            return false;
+        }
+
+        internal static string PluraliseName(string name)
+        {
+            if ((name.EndsWith("x", StringComparison.OrdinalIgnoreCase) || name.EndsWith("ch", StringComparison.OrdinalIgnoreCase)) || (name.EndsWith("ss", StringComparison.OrdinalIgnoreCase) || name.EndsWith("sh", StringComparison.OrdinalIgnoreCase)))
+            {
+                name = name + "es";
+                return name;
+            }
+            if ((name.EndsWith("y", StringComparison.OrdinalIgnoreCase) && (name.Length > 1)) && !IsVowel(name[name.Length - 2]))
+            {
+                name = name.Remove(name.Length - 1, 1);
+                name = name + "ies";
+                return name;
+            }
+            if (!name.EndsWith("s", StringComparison.OrdinalIgnoreCase))
+            {
+                name = name + "s";
+            }
+            return name;
         }
 
         private static void CreateCSharp(DirectoryInfo d, string genName, CodeCompileUnit currUnit)

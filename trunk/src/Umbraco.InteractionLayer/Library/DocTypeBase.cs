@@ -303,12 +303,30 @@ namespace Umbraco.InteractionLayer.Library
             }
         }
 
+        /// <summary>
+        /// Gets the doc type info attribute for the instance
+        /// </summary>
+        /// <value>The doc type info.</value>
         public UmbracoDocTypeInfoAttribute DocTypeInfo
         {
             get
             {
                 var att = this
                     .GetType()
+                    .GetCustomAttributes(typeof(UmbracoDocTypeInfoAttribute), false)[0];
+                return (UmbracoDocTypeInfoAttribute)att;
+            }
+        }
+
+        /// <summary>
+        /// Gets the doc type info attribute for the class
+        /// </summary>
+        /// <value>The doc type info.</value>
+        public static UmbracoDocTypeInfoAttribute DocTypeInfo
+        {
+            get
+            {
+                var att = typeof(DocTypeBase)
                     .GetCustomAttributes(typeof(UmbracoDocTypeInfoAttribute), false)[0];
                 return (UmbracoDocTypeInfoAttribute)att;
             }
