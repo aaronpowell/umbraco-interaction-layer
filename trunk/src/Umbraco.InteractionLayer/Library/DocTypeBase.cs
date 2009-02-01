@@ -299,7 +299,7 @@ namespace Umbraco.InteractionLayer.Library
             }
             else
             {
-                throw new Exception("This document does not exist in Umbraco yet. Make sure you save before publishing");
+                throw new NullReferenceException("This document does not exist in Umbraco yet. Make sure you save before publishing");
             }
         }
 
@@ -313,20 +313,6 @@ namespace Umbraco.InteractionLayer.Library
             {
                 var att = this
                     .GetType()
-                    .GetCustomAttributes(typeof(UmbracoDocTypeInfoAttribute), false)[0];
-                return (UmbracoDocTypeInfoAttribute)att;
-            }
-        }
-
-        /// <summary>
-        /// Gets the doc type info attribute for the class
-        /// </summary>
-        /// <value>The doc type info.</value>
-        public static UmbracoDocTypeInfoAttribute DocTypeInfo
-        {
-            get
-            {
-                var att = typeof(DocTypeBase)
                     .GetCustomAttributes(typeof(UmbracoDocTypeInfoAttribute), false)[0];
                 return (UmbracoDocTypeInfoAttribute)att;
             }

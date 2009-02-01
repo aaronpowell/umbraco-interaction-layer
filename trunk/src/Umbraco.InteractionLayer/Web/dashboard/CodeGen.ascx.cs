@@ -15,7 +15,7 @@ namespace Umbraco.InteractionLayer.Web.dashboard
             if (!IsPostBack)
             {
 #if v4
-                this.rptDocTypes.DataSource = umbraco.cms.businesslogic.web.DocumentType.GetAllAsList(); 
+                this.rptDocTypes.DataSource = umbraco.cms.businesslogic.web.DocumentType.GetAllAsList();
 #endif
 #if v3
                 this.rptDocTypes.DataSource = umbraco.cms.businesslogic.web.DocumentType.GetAll; 
@@ -53,7 +53,12 @@ namespace Umbraco.InteractionLayer.Web.dashboard
 
             cc.GetDocTypes();
 
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "saved", "top.umbSpeechBubble('info','Umbraco Interaction Layer','Code generation complete.');", true);
+#if v3
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "saved", "top.umbSpeechBubble('info','UIL','Code generation complete.');", true); 
+#endif
+#if v4
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "saved", "top.UmbSpeechBubble.ShowMessage('success','UIL','Code generation complete.');", true);
+#endif
         }
     }
 }
