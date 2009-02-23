@@ -27,7 +27,7 @@ namespace Umbraco.InteractionLayer.Library
 
         protected DocTypeBase(Document source)
         {
-            if (this.DocTypeInfo.Id != source.ContentType.Id)
+            if (this.DocTypeInfo.Alias != source.ContentType.Alias)
             {
                 throw new DocTypeMissMatchException(source.ContentType.Id, this.DocTypeInfo.Id);
             }
@@ -61,6 +61,8 @@ namespace Umbraco.InteractionLayer.Library
                 var val = method.MakeGenericMethod(item.PropertyType).Invoke(null, new object[] { source, att.Alias });
                 item.SetValue(this, val, null);
             }
+
+            this.IsDirty = false;
         }
 
         public bool IsDirty { get; protected set; }
@@ -225,7 +227,7 @@ namespace Umbraco.InteractionLayer.Library
                 if (this.Id == 0)
                 {
                     var att = this.DocTypeInfo;
-                    this._umbracoDocument = Document.MakeNew(this.Text, new DocumentType(att.Id), new User(Settings.Default.CreateAsUserId), this.ParentNodeId);
+                    this._umbracoDocument = Document.MakeNew(this.Text, DocumentType.GetByAlias(att.Alias), new User(Settings.Default.CreateAsUserId), this.ParentNodeId);
                     this.Id = this._umbracoDocument.Id;
                     this.UniqueId = this._umbracoDocument.UniqueId;
                 }
